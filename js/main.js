@@ -17,17 +17,17 @@ addTodo.addEventListener("click", () => {
     LI.append(TEXT_DIV)
 
     let BTN_WRAPPER = document.createElement("div")
-    BTN_WRAPPER.className = "d-flex gap-1"
+    BTN_WRAPPER.className = "d-flex gap-1";
 
-    let EDIT_BTN = document.createElement("button")
-    EDIT_BTN.className = "btn btn-warning"
-    EDIT_BTN.textContent = "edit"
-    BTN_WRAPPER.append(EDIT_BTN)
+    let BTN_EDIT = document.createElement("button")
+    BTN_EDIT.className = "btn btn-warning"
+    BTN_EDIT.textContent = "edit"
+    BTN_WRAPPER.append(BTN_EDIT)
 
-    let DELETE_BTN = document.createElement("button")
-    EDIT_BTN.className = "btn btn-danger"
-    DELETE_BTN.textContent = "delete"
-    BTN_WRAPPER.append(DELETE_BTN)
+    let BTN_DELETE = document.createElement("button")
+    BTN_DELETE.className = "btn btn-danger"
+    BTN_DELETE.textContent = "delete"
+    BTN_WRAPPER.append(BTN_DELETE)
 
     LI.append(BTN_WRAPPER)
     listGroup.append(LI)
