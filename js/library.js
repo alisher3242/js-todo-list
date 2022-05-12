@@ -18,13 +18,13 @@ export function createID(id, isDone, text) {
     BTN_WRAPPER.className = "d-flex gap-1";
 
     let BTN_EDIT = document.createElement("button")
-    BTN_EDIT.dataset.type = "delete"
+    BTN_EDIT.dataset.type = "edit"
     BTN_EDIT.className = "btn btn-warning"
     BTN_EDIT.textContent = "edit"
     BTN_WRAPPER.append(BTN_EDIT)
 
     let BTN_DELETE = document.createElement("button")
-    BTN_DELETE.dataset.type = "edit"
+    BTN_DELETE.dataset.type = "delete"
     BTN_DELETE.className = "btn btn-danger"
     BTN_DELETE.textContent = "delete"
     BTN_WRAPPER.append(BTN_DELETE)

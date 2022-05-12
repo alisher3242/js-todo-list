@@ -2,7 +2,7 @@ import todoDatas from "../API/Data.js";
 import * as library from "./library.js";
 
 let storage = window.localStorage;
-let data = JSON.parse(storage.getItem("todos")).length > 0 ?
+let data = JSON.parse(storage.getItem("todos")) ?
     JSON.parse(storage.getItem("todos")) :
     todoDatas;
 
