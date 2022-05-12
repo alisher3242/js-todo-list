@@ -1,36 +1,56 @@
+import todoDatas from "../API/Data.js";
+import * as library from "./library.js";
+
+let storage = window.localStorage;
+let data = JSON.parse(storage.getItem("todos")).length > 0 ?
+    JSON.parse(storage.getItem("todos")) :
+    todoDatas;
+
 let makerTodo = document.querySelector(".maker-todo")
 let addTodo = document.querySelector(".add-todo")
 let listGroup = document.querySelector(".list-group")
 
-addTodo.addEventListener("click", () => {
-    let LI = document.createElement("li")
-    LI.className = "list-group-item d-flex align-items-center"
+listGroup.addEventListener("click", (event) => {
+    let eventTarget = event.target;
+    if (!listGroup.contains(eventTarget)) return;
+    if (!eventTarget.closest("[data-type")) return;
 
-    let INPUT = document.createElement("input")
-    INPUT.className = "form-check-input me-3"
-    INPUT.setAttribute('type', 'checkbox')
-    LI.append(INPUT)
+    switch (eventTarget.dataset.type) {
+        case "delete":
+            let deleteEventTarget = eventTarget.parentNode.parentNode;
+            console.log(deleteEventTarget);
+            data = data.filter((todo) => {
+                return todo.id != deleteEventTarget.dataset.id
+            });
 
-    let TEXT_DIV = document.createElement("div")
-    TEXT_DIV.textContent = makerTodo.value
-    TEXT_DIV.className = "text w-100"
-    LI.append(TEXT_DIV)
-
-    let BTN_WRAPPER = document.createElement("div")
-    BTN_WRAPPER.className = "d-flex gap-1";
-
-    let BTN_EDIT = document.createElement("button")
-    BTN_EDIT.className = "btn btn-warning"
-    BTN_EDIT.textContent = "edit"
-    BTN_WRAPPER.append(BTN_EDIT)
-
-    let BTN_DELETE = document.createElement("button")
-    BTN_DELETE.className = "btn btn-danger"
-    BTN_DELETE.textContent = "delete"
-    BTN_WRAPPER.append(BTN_DELETE)
-
-    LI.append(BTN_WRAPPER)
-    listGroup.append(LI)
-
-    makerTodo.value = ""
+            storage.setItem("todos", JSON.stringify(data));
+            deleteEventTarget.remove();
+            break;
+    }
 })
+
+addTodo.addEventListener("click", () => {
+
+    if (makerTodo.value.trim().length <= 3) {
+        alert("")
+        return
+    }
+
+    let todoObject = library.todoNewObject(makerTodo.value);
+    data.push(todoObject);
+
+    storage.setItem("todos", JSON.stringify(data));
+
+    let todoNode = library.createID(
+        todoObject.id,
+        todoObject.isDone,
+        todoObject.text
+    );
+    listGroup.prepend(todoNode);
+    makerTodo.value = "";
+});
+
+data.forEach((todo) => {
+    let todoNode = library.createID(todo.id, todo.isDone, todo.text);
+    listGroup.prepend(todoNode)
+});
