@@ -1,6 +1,7 @@
 import todoDatas from "../API/Data.js";
 import * as library from "./library.js";
 
+let forma = document.querySelector("#forma")
 let storage = window.localStorage;
 let data = JSON.parse(storage.getItem("todos")) ?
     JSON.parse(storage.getItem("todos")) :
@@ -9,6 +10,9 @@ let data = JSON.parse(storage.getItem("todos")) ?
 let makerTodo = document.querySelector(".maker-todo")
 let addTodo = document.querySelector(".add-todo")
 let listGroup = document.querySelector(".list-group")
+forma.addEventListener("submit", (event) => {
+    event.preventDefault
+})
 
 listGroup.addEventListener("click", (event) => {
     let eventTarget = event.target;
@@ -26,6 +30,32 @@ listGroup.addEventListener("click", (event) => {
             storage.setItem("todos", JSON.stringify(data));
             deleteEventTarget.remove();
             break;
+        case "check":
+            let checkEventTarget = eventTarget.parentNode;
+            checkEventTarget.classList.toggle("task-done")
+                // checkEventTarget.dataset.isDone =
+                //     checkEventTarget.dataset.isDone === "false" ? true : false;
+            data = data.map(todo => {
+                if (todo.id == checkEventTarget.dataset.id) {
+                    todo.isDone = !todo.isDone
+                }
+
+                return todo;
+            });
+
+            console.log(data);
+
+            storage.setItem("todos", JSON.stringify(data))
+            break;
+
+        case "edit":
+            let editEventTarget = eventTarget.parentNode.parentNode;
+            let todoText = editEventTarget.childNodes[1].textContent;
+            let editId = editEventTarget.dataset.id
+            editTodo.value = todoText
+            editTodo.dataset.id = editId
+
+            break
     }
 })
 
@@ -53,4 +83,26 @@ addTodo.addEventListener("click", () => {
 data.forEach((todo) => {
     let todoNode = library.createID(todo.id, todo.isDone, todo.text);
     listGroup.prepend(todoNode)
+});
+
+saveTodoForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    let newTodo = editTodo.value.trim();
+    let todoId = editTodo.dataset.id;
+
+    if (newTodo.length < 3) {
+        alert("Ko'proq matn kiriting");
+        return;
+    }
+
+    data = data.map((todo) => {
+        if (todo.id == todoId) {
+            todo.text = newTodo;
+        }
+
+        return todo;
+    });
+
+    library.render(data, listGroup);
 });
